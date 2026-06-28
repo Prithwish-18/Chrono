@@ -1,0 +1,211 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
+import MicButton from './MicButton';
+
+interface PomodoroPanelProps {
+  onClose: () => void;
+}
+
+export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
+  const [time, setTime] = useState(25 * 60);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isWorkSession, setIsWorkSession] = useState(true);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [voiceStatus, setVoiceStatus] = useState('');
+
+  const pomodoroMic = useSpeechRecognition({
+    lang: 'en-IN',
+    continuous: true,
+    onResult: (text) => {
+      const lower = text.toLowerCase().trim();
+      if (lower.includes('start') || lower.includes('begin') || lower.includes('go')) {
+        handleStart();
+        setVoiceStatus('▶️ Started via voice');
+      } else if (lower.includes('pause') || lower.includes('stop')) {
+        handlePause();
+        setVoiceStatus('⏸️ Paused via voice');
+      } else if (lower.includes('reset') || lower.includes('restart')) {
+        handleReset();
+        setVoiceStatus('🔄 Reset via voice');
+      } else {
+        setVoiceStatus(`Heard: "${text}" — say start, pause, or reset`);
+      }
+      setTimeout(() => setVoiceStatus(''), 3000);
+    }
+  });
+
+  // Synthesize alarm procedurally so it's 100% reliable and asset-independent
+  const playAlarmSound = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      
+      // Multi-note cute alarm chime
+      const playTone = (freq: number, startTime: number, duration: number) => {
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, startTime);
+        
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      };
+
+      const now = ctx.currentTime;
+      playTone(523.25, now, 0.4);       // C5
+      playTone(659.25, now + 0.2, 0.4); // E5
+      playTone(783.99, now + 0.4, 0.4); // G5
+      playTone(1046.50, now + 0.6, 0.8); // C6
+    } catch (e) {
+      console.error("Audio synth error:", e);
+    }
+  };
+
+  useEffect(() => {
+    if (isRunning) {
+      timerRef.current = setInterval(() => {
+        setTime((prev) => {
+          if (prev <= 1) {
+            // End of session! Play alarm
+            playAlarmSound();
+            setIsWorkSession((curr) => {
+              const nextIsWork = !curr;
+              setTime(nextIsWork ? 25 * 60 : 5 * 60);
+              return nextIsWork;
+            });
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isRunning]);
+
+  const handleStart = () => {
+    setIsRunning(true);
+  };
+
+  const handlePause = () => {
+    setIsRunning(false);
+  };
+
+  const handleReset = () => {
+    setIsRunning(false);
+    setIsWorkSession(true);
+    setTime(25 * 60);
+  };
+
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  // Percentage for the progress circle
+  const totalDuration = isWorkSession ? 25 * 60 : 5 * 60;
+  const percentage = ((totalDuration - time) / totalDuration) * 100;
+
+  return (
+    <div className="fixed inset-0 z-[200] bg-[#8E1616] p-8 md:p-14 overflow-y-auto flex flex-col justify-between select-none">
+      
+      {/* Top Header Row */}
+      <div className="flex justify-between items-start w-full">
+        <h2 className="text-white text-5xl md:text-6xl font-medium font-sans tracking-tight leading-none select-none">
+          Study with me!
+        </h2>
+        <button 
+          onClick={onClose}
+          className="bg-[#EBFD3F] hover:bg-[#d9ec2f] text-black font-bold px-7 py-3 rounded-xl cursor-pointer transition-all active:scale-95 text-lg shadow-md font-sans"
+        >
+          Close
+        </button>
+      </div>
+
+      {/* Central Interactive Block */}
+      <div className="flex-1 flex flex-col items-center justify-center py-6">
+        <div className="text-center flex flex-col items-center gap-10">
+          
+          {/* Main Orange Clock Face */}
+          <div className="relative w-80 h-80 md:w-[350px] md:h-[350px] rounded-full bg-[#FF510D] flex items-center justify-center border-[8px] border-[#FED988] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all">
+            <span className="font-sans-serif text-[#FBF3DB] text-[85px] md:text-[110px] font-medium leading-none tracking-tight select-none">
+              {formattedMinutes}:{formattedSeconds}
+            </span>
+          </div>
+
+          {/* Symmetrical Controls Row */}
+          <div className="flex gap-4 md:gap-5 justify-center">
+            <button 
+              onClick={handleStart}
+              className="px-9 py-3 text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
+            >
+              Start
+            </button>
+            <button 
+              onClick={handlePause}
+              className="px-9 py-3 text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
+            >
+              Pause
+            </button>
+            <button 
+              onClick={handleReset}
+              className="px-9 py-3 text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
+            >
+              Reset
+            </button>
+          </div>
+
+          {/* Voice control section */}
+          <div className="mt-8 flex flex-col items-center gap-3 bg-black/25 p-5 rounded-2xl max-w-sm w-full border border-white/5 mx-auto">
+            <div className="flex items-center gap-3">
+              <MicButton
+                isListening={pomodoroMic.isListening}
+                isSupported={pomodoroMic.isSupported}
+                onToggle={() => pomodoroMic.isListening ? pomodoroMic.stop() : pomodoroMic.start()}
+                size="lg"
+              />
+              <span className="text-[#F5E8C7]/80 text-base font-semibold">
+                {pomodoroMic.isListening ? '🎤 Listening for commands...' : 'Voice commands'}
+              </span>
+            </div>
+            {voiceStatus && (
+              <p className="text-[#ffbf64] text-sm font-semibold animate-pulse">{voiceStatus}</p>
+            )}
+            {pomodoroMic.isSupported && (
+              <p className="text-[#F5E8C7]/40 text-xs text-center leading-normal">
+                Try saying: <span className="text-[#F5E8C7]/70 font-bold font-mono">"start"</span>, <span className="text-[#F5E8C7]/70 font-bold font-mono">"pause"</span>, or <span className="text-[#F5E8C7]/70 font-bold font-mono">"reset"</span>
+              </p>
+            )}
+            {pomodoroMic.error && (
+              <div className="text-red-300 text-xs bg-red-950/40 border border-red-500/20 p-2.5 rounded-lg flex flex-col gap-1 mt-1 text-center w-full">
+                <span className="font-bold">🎤 Mic error:</span>
+                {pomodoroMic.error === 'not-allowed' ? (
+                  <span>Microphone access was denied. Please allow microphone access in your browser settings to use voice controls.</span>
+                ) : (
+                  <span>{pomodoroMic.error}</span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Decorative empty bottom spacer */}
+      <div className="h-4"></div>
+    </div>
+  );
+}
