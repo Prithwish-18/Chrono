@@ -7,6 +7,14 @@
   
   [![Live Demo](https://img.shields.io/badge/Live_Demo-Access_Here-blue?style=for-the-badge&logo=googlecloud)](https://chrono-1033583129131.asia-southeast1.run.app)
   [![Hackathon](https://img.shields.io/badge/Coding_Ninjas-Vibe_2_Ship-orange?style=for-the-badge)](https://blockseblock.com/dashboard)
+  
+  <br />
+
+  <div>
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  </div>
 </div>
 
 ---
