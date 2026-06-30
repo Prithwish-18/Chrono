@@ -6,7 +6,7 @@
 
 This contains everything you need to run your app locally.
 
-View my webapp in AI Studio: https://chrono-1033583129131.asia-southeast1.run.app
+View your app in AI Studio: https://ai.studio/apps/82614221-71f5-47f9-ad3b-aa052dc4c221
 
 ## Run Locally
 
