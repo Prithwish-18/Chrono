@@ -52,14 +52,33 @@ export function GCalProvider({ children }: { children: React.ReactNode }) {
   });
 
   React.useEffect(() => {
-    fetch('/api/config')
-      .then(res => res.json())
-      .then(data => {
-        if (data.googleClientId) {
-          setGoogleClientId(data.googleClientId);
+    let active = true;
+    const fetchConfig = async (retries = 5, delay = 1000) => {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const res = await fetch('/api/config');
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          const data = await res.json();
+          if (!active) return;
+          if (data.googleClientId) {
+            setGoogleClientId(data.googleClientId);
+          }
+          return; // Success
+        } catch (err) {
+          if (!active) return;
+          if (i === retries - 1) {
+            console.warn('Could not fetch runtime Google Client ID from backend (using client-side fallback if set):', err);
+          } else {
+            // Wait before next retry with exponential backoff
+            await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+          }
         }
-      })
-      .catch(err => console.error('Failed to load runtime Google Client ID:', err));
+      }
+    };
+    fetchConfig();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const tokenClientRef = useRef<any>(null);
