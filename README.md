@@ -47,21 +47,21 @@ However, because the Google Calendar API is currently in "Testing" mode under Go
 ## 🎯 Problem Statement
 
 **The Last-Minute Life Saver**  
-Students, professionals, and entrepreneurs frequently miss deadlines, assignments, meetings, and important commitments. Existing productivity tools often rely on passive reminders that are easy to ignore and do little to help users actually complete their tasks[cite: 5].
+Students, professionals, and entrepreneurs frequently miss deadlines, assignments, meetings, and important commitments. Existing productivity tools often rely on passive reminders that are easy to ignore and do little to help users actually complete their tasks.
 
 **The Chrono Solution:**  
-Chrono moves beyond traditional static reminders[cite: 5]. It is a context-aware application that acts as a proactive productivity companion[cite: 5]. By leveraging semantic AI reasoning, Chrono transforms unorganized, anxiety-inducing task lists into structured, actionable hourly roadmaps synchronized directly to a user's real-world timeline.
+Chrono moves beyond traditional static reminders. It is a context-aware application that acts as a proactive productivity companion. By leveraging semantic AI reasoning, Chrono transforms unorganized, anxiety-inducing task lists into structured, actionable hourly roadmaps synchronized directly to a user's real-world timeline.
 
 ---
 
 ## ✨ Key Features
 
-* 🎙️ **Voice-Automated Task Capturing:** Native Web Speech API integration allowing users to dictate tasks, details, and complex situations hands-free[cite: 5].
-* 🧠 **Intelligent Task Prioritization:** A Gemini-powered engine that analyzes task deadlines and importance to dynamically re-sequence daily agendas[cite: 5].
-* 🤖 **Chrono-Coach (Conversational Mentor):** An interactive sidebar coach that parses real-time stress scenarios, drafts markdown-formatted strategies, and allows users to inject actionable planner blocks directly into their dashboard with a single tap[cite: 5].
-* 📅 **One-Tap Google Calendar Sync:** Translates AI-generated daily schedules and task complexity estimates into precise 24-hour timestamp blocks, securely writing them to the user's Google Calendar[cite: 5].
-* 🍅 **Procedural Pomodoro Suite:** A highly reliable focus timer featuring triangle-wave synthesized audio chimes built natively with the Web Audio API to guarantee 100% execution reliability[cite: 5].
-* 🔥 **Gamified Consistency Tracking:** Real-time Firestore-backed streak tracking, level progression, and an 84-day visual consistency heatmap for habit building[cite: 5].
+* 🎙️ **Voice-Automated Task Capturing:** Native Web Speech API integration allowing users to dictate tasks, details, and complex situations hands-free.
+* 🧠 **Intelligent Task Prioritization:** A Gemini-powered engine that analyzes task deadlines and importance to dynamically re-sequence daily agendas.
+* 🤖 **Chrono-Coach (Conversational Mentor):** An interactive sidebar coach that parses real-time stress scenarios, drafts markdown-formatted strategies, and allows users to inject actionable planner blocks directly into their dashboard with a single tap.
+* 📅 **One-Tap Google Calendar Sync:** Translates AI-generated daily schedules and task complexity estimates into precise 24-hour timestamp blocks, securely writing them to the user's Google Calendar.
+* 🍅 **Procedural Pomodoro Suite:** A highly reliable focus timer featuring triangle-wave synthesized audio chimes built natively with the Web Audio API to guarantee 100% execution reliability
+* 🔥 **Gamified Consistency Tracking:** Real-time Firestore-backed streak tracking, level progression, and an 84-day visual consistency heatmap for habit building.
 
 ---
 
