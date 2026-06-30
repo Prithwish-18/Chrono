@@ -165,9 +165,7 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
 
   // Sync with localstorage as backup
   useEffect(() => {
-    if (tasks.length > 0) {
-      localStorage.setItem(`tasks_${userId}`, JSON.stringify(tasks));
-    }
+    localStorage.setItem(`tasks_${userId}`, JSON.stringify(tasks));
   }, [tasks, userId]);
 
   const handleAddTask = async (e: React.FormEvent) => {
@@ -204,11 +202,17 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
   };
 
   const handleMarkComplete = async (taskId: string) => {
+    // Instantly remove from local state for immediate user feedback
+    setTasks(prev => {
+      const updated = prev.filter(t => t.id !== taskId);
+      localStorage.setItem(`tasks_${userId}`, JSON.stringify(updated));
+      return updated;
+    });
+
     try {
       await deleteDoc(doc(db, 'users', userId, 'tasks', taskId));
     } catch (err) {
-      console.error("Failed to delete from Firestore, deleting locally:", err);
-      setTasks(prev => prev.filter(t => t.id !== taskId));
+      console.error("Failed to delete from Firestore:", err);
     }
   };
 

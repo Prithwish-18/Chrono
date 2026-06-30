@@ -19,6 +19,7 @@ export default function ProductivityCoach({ userId, isOpen, onClose }: Productiv
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [appliedPlans, setAppliedPlans] = useState<Set<string>>(new Set());
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const coachMic = useSpeechRecognition({
@@ -173,18 +174,17 @@ export default function ProductivityCoach({ userId, isOpen, onClose }: Productiv
   };
 
   const handleClearChat = () => {
-    if (window.confirm("Do you want to clear your conversation history?")) {
-      localStorage.removeItem(`coach_history_${userId}`);
-      setMessages([
-        {
-          id: 'welcome',
-          sender: 'coach',
-          text: "Hey! I'm **Chrono-Coach**, your high-performance personal productivity mentor. Procrastinating? Deadlines creeping up? Overwhelmed?\n\nTell me what's on your plate (e.g., 'I have 3 math exams in 2 days and zero motivation'). I'll draft an extreme action plan for you, and we can auto-populate your planner or task lists instantly!",
-          timestamp: new Date().toISOString()
-        }
-      ]);
-      setAppliedPlans(new Set());
-    }
+    localStorage.removeItem(`coach_history_${userId}`);
+    setMessages([
+      {
+        id: 'welcome',
+        sender: 'coach',
+        text: "Hey! I'm **Chrono-Coach**, your high-performance personal productivity mentor. Procrastinating? Deadlines creeping up? Overwhelmed?\n\nTell me what's on your plate (e.g., 'I have 3 math exams in 2 days and zero motivation'). I'll draft an extreme action plan for you, and we can auto-populate your planner or task lists instantly!",
+        timestamp: new Date().toISOString()
+      }
+    ]);
+    setAppliedPlans(new Set());
+    setShowClearConfirm(false);
   };
 
   if (!isOpen) return null;
@@ -202,12 +202,31 @@ export default function ProductivityCoach({ userId, isOpen, onClose }: Productiv
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button 
-            onClick={handleClearChat}
-            className="text-xs text-[#F5E8C7]/50 hover:text-[#F5E8C7] font-mono cursor-pointer"
-          >
-            Clear
-          </button>
+          {showClearConfirm ? (
+            <div className="flex items-center gap-2 bg-black/40 border border-[#ffbf64]/30 px-2.5 py-1 rounded-lg text-xs animate-pulse">
+              <span className="text-[#F5E8C7]/90 font-mono text-[11px]">Clear?</span>
+              <button 
+                onClick={handleClearChat}
+                className="text-yellow-400 hover:text-yellow-300 font-bold px-1.5 cursor-pointer text-[11px] font-mono"
+              >
+                Yes
+              </button>
+              <span className="text-[#F5E8C7]/30">|</span>
+              <button 
+                onClick={() => setShowClearConfirm(false)}
+                className="text-[#F5E8C7]/60 hover:text-white font-bold px-1.5 cursor-pointer text-[11px] font-mono"
+              >
+                No
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setShowClearConfirm(true)}
+              className="text-xs text-[#F5E8C7]/50 hover:text-[#F5E8C7] font-mono cursor-pointer bg-black/20 hover:bg-black/35 px-2.5 py-1.5 rounded-lg border border-white/5 transition-all"
+            >
+              Clear
+            </button>
+          )}
           <button 
             onClick={onClose}
             className="text-[#F5E8C7] hover:text-white p-1 rounded-md cursor-pointer"

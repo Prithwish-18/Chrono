@@ -74,19 +74,7 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
   useEffect(() => {
     if (isRunning) {
       timerRef.current = setInterval(() => {
-        setTime((prev) => {
-          if (prev <= 1) {
-            // End of session! Play alarm
-            playAlarmSound();
-            setIsWorkSession((curr) => {
-              const nextIsWork = !curr;
-              setTime(nextIsWork ? 25 * 60 : 5 * 60);
-              return nextIsWork;
-            });
-            return 0;
-          }
-          return prev - 1;
-        });
+        setTime((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -96,6 +84,20 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [isRunning]);
+
+  // Clean transition when timer reaches 0
+  useEffect(() => {
+    if (time === 0 && isRunning) {
+      setIsRunning(false);
+      playAlarmSound();
+      
+      setIsWorkSession((curr) => {
+        const nextIsWork = !curr;
+        setTime(nextIsWork ? 25 * 60 : 5 * 60);
+        return nextIsWork;
+      });
+    }
+  }, [time, isRunning]);
 
   const handleStart = () => {
     setIsRunning(true);
@@ -107,8 +109,7 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
 
   const handleReset = () => {
     setIsRunning(false);
-    setIsWorkSession(true);
-    setTime(25 * 60);
+    setTime(isWorkSession ? 25 * 60 : 5 * 60);
   };
 
   const minutes = Math.floor(time / 60);
@@ -138,12 +139,50 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
 
       {/* Central Interactive Block */}
       <div className="flex-1 flex flex-col items-center justify-center py-6">
-        <div className="text-center flex flex-col items-center gap-10">
+        <div className="text-center flex flex-col items-center gap-6 md:gap-8">
           
+          {/* Mode Switcher */}
+          <div className="flex gap-2.5 bg-black/35 p-1.5 rounded-2xl border border-white/10 shadow-inner">
+            <button
+              onClick={() => {
+                setIsRunning(false);
+                setIsWorkSession(true);
+                setTime(25 * 60);
+              }}
+              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                isWorkSession 
+                  ? 'bg-[#FF510D] text-[#FBF3DB] shadow-lg scale-105' 
+                  : 'text-[#F5E8C7]/65 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              🎯 Focus (25m)
+            </button>
+            <button
+              onClick={() => {
+                setIsRunning(false);
+                setIsWorkSession(false);
+                setTime(5 * 60);
+              }}
+              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                !isWorkSession 
+                  ? 'bg-[#FF510D] text-[#FBF3DB] shadow-lg scale-105' 
+                  : 'text-[#F5E8C7]/65 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              ☕ Break (5m)
+            </button>
+          </div>
+
           {/* Main Orange Clock Face */}
-          <div className="relative w-80 h-80 md:w-[350px] md:h-[350px] rounded-full bg-[#FF510D] flex items-center justify-center border-[8px] border-[#FED988] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all">
-            <span className="font-sans-serif text-[#FBF3DB] text-[85px] md:text-[110px] font-medium leading-none tracking-tight select-none">
+          <div className="relative w-80 h-80 md:w-[350px] md:h-[350px] rounded-full bg-[#FF510D] flex flex-col items-center justify-center border-[8px] border-[#FED988] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all">
+            <span className="text-[#FBF3DB]/60 text-xs md:text-sm font-bold font-mono tracking-widest uppercase mb-1">
+              {isWorkSession ? '🎯 Focus Session' : '☕ Short Break'}
+            </span>
+            <span className="font-sans-serif text-[#FBF3DB] text-[80px] md:text-[105px] font-semibold leading-none tracking-tight select-none">
               {formattedMinutes}:{formattedSeconds}
+            </span>
+            <span className={`text-[#EBFD3F] text-[11px] font-bold tracking-widest uppercase mt-3 px-3 py-1 rounded-full bg-black/15 border border-white/5 transition-all ${isRunning ? 'animate-pulse' : 'opacity-50'}`}>
+              {isRunning ? '● Running' : 'Paused'}
             </span>
           </div>
 
