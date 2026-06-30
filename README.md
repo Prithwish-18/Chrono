@@ -1,5 +1,7 @@
 <div align="center">
-  <img width="1200" height="475" alt="GHBanner" src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1200&auto=format&fit=crop" />
+  <img width="800" height="400" alt="Chrono Logo" src="logo.png" />
+  
+  <br />
   
   # ⏳ Chrono: The Last-Minute Life Saver
   
