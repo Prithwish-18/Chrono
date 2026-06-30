@@ -83,3 +83,33 @@ If you wish to run Chrono locally, follow these steps:
 ```bash
 git clone [https://github.com/Prithwish-18/Chrono.git](https://github.com/Prithwish-18/Chrono.git)
 cd Chrono
+```
+
+**2. Install dependencies:**
+```bash
+npm install
+```
+
+**3. Configure Environment Variables:**
+Create a .env file in the root directory and populate it with your own keys (refer to .env.example):
+```bash
+
+GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+APP_URL="http://localhost:3000"
+VITE_GOOGLE_CLIENT_ID="YOUR_GOOGLE_CLIENT_ID"
+VITE_FIREBASE_API_KEY="YOUR_API_KEY"
+VITE_FIREBASE_AUTH_DOMAIN="YOUR_AUTH_DOMAIN"
+VITE_FIREBASE_PROJECT_ID="YOUR_PROJECT_ID"
+VITE_FIREBASE_STORAGE_BUCKET="YOUR_STORAGE_BUCKET"
+VITE_FIREBASE_MESSAGING_SENDER_ID="YOUR_MESSAGING_SENDER_ID"
+VITE_FIREBASE_APP_ID="YOUR_APP_ID"
+VITE_FIREBASE_MEASUREMENT_ID="YOUR_MEASUREMENT_ID"
+```
+
+**4. Run the development server:**
+```bash
+npm run dev
+```
+
+Built with ❤️ for the Coding Ninjas x Google for Developers VIBE 2 SHIP Hackathon.
+
