@@ -122,16 +122,17 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
   const percentage = ((totalDuration - time) / totalDuration) * 100;
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#8E1616] p-8 md:p-14 overflow-y-auto flex flex-col justify-between select-none">
+    <div className="fixed inset-0 z-[200] bg-[#8E1616] p-4 sm:p-8 md:p-14 overflow-y-auto flex flex-col justify-between select-none">
       
       {/* Top Header Row */}
-      <div className="flex justify-between items-start w-full">
-        <h2 className="text-white text-5xl md:text-6xl font-medium font-sans tracking-tight leading-none select-none">
+      <div className="flex justify-between items-center w-full gap-4 pb-4 border-b border-white/10">
+        <h2 className="text-white text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-medium font-sans tracking-tight leading-none select-none">
           Study with me!
         </h2>
         <button 
+          type="button"
           onClick={onClose}
-          className="bg-[#EBFD3F] hover:bg-[#d9ec2f] text-black font-bold px-7 py-3 rounded-xl cursor-pointer transition-all active:scale-95 text-lg shadow-md font-sans"
+          className="bg-[#EBFD3F] hover:bg-[#d9ec2f] text-black font-bold px-4 sm:px-7 py-2 sm:py-3 rounded-xl cursor-pointer transition-all active:scale-95 text-sm sm:text-lg shadow-md font-sans flex-shrink-0"
         >
           Close
         </button>
@@ -139,17 +140,18 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
 
       {/* Central Interactive Block */}
       <div className="flex-1 flex flex-col items-center justify-center py-6">
-        <div className="text-center flex flex-col items-center gap-6 md:gap-8">
+        <div className="text-center flex flex-col items-center gap-6 md:gap-8 w-full max-w-md">
           
           {/* Mode Switcher */}
-          <div className="flex gap-2.5 bg-black/35 p-1.5 rounded-2xl border border-white/10 shadow-inner">
+          <div className="flex gap-2 bg-black/35 p-1 rounded-2xl border border-white/10 shadow-inner w-full max-w-xs justify-center">
             <button
+              type="button"
               onClick={() => {
                 setIsRunning(false);
                 setIsWorkSession(true);
                 setTime(25 * 60);
               }}
-              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+              className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 isWorkSession 
                   ? 'bg-[#FF510D] text-[#FBF3DB] shadow-lg scale-105' 
                   : 'text-[#F5E8C7]/65 hover:text-white hover:bg-white/5'
@@ -158,12 +160,13 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
               🎯 Focus (25m)
             </button>
             <button
+              type="button"
               onClick={() => {
                 setIsRunning(false);
                 setIsWorkSession(false);
                 setTime(5 * 60);
               }}
-              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+              className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 !isWorkSession 
                   ? 'bg-[#FF510D] text-[#FBF3DB] shadow-lg scale-105' 
                   : 'text-[#F5E8C7]/65 hover:text-white hover:bg-white/5'
@@ -174,42 +177,45 @@ export default function PomodoroPanel({ onClose }: PomodoroPanelProps) {
           </div>
 
           {/* Main Orange Clock Face */}
-          <div className="relative w-80 h-80 md:w-[350px] md:h-[350px] rounded-full bg-[#FF510D] flex flex-col items-center justify-center border-[8px] border-[#FED988] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all">
-            <span className="text-[#FBF3DB]/60 text-xs md:text-sm font-bold font-mono tracking-widest uppercase mb-1">
+          <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[350px] md:h-[350px] rounded-full bg-[#FF510D] flex flex-col items-center justify-center border-4 sm:border-[8px] border-[#FED988] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all">
+            <span className="text-[#FBF3DB]/60 text-[10px] sm:text-xs md:text-sm font-bold font-mono tracking-widest uppercase mb-1">
               {isWorkSession ? '🎯 Focus Session' : '☕ Short Break'}
             </span>
-            <span className="font-sans-serif text-[#FBF3DB] text-[80px] md:text-[105px] font-semibold leading-none tracking-tight select-none">
+            <span className="font-sans text-[#FBF3DB] text-[55px] sm:text-[80px] md:text-[105px] font-semibold leading-none tracking-tight select-none">
               {formattedMinutes}:{formattedSeconds}
             </span>
-            <span className={`text-[#EBFD3F] text-[11px] font-bold tracking-widest uppercase mt-3 px-3 py-1 rounded-full bg-black/15 border border-white/5 transition-all ${isRunning ? 'animate-pulse' : 'opacity-50'}`}>
+            <span className={`text-[#EBFD3F] text-[9px] sm:text-[11px] font-bold tracking-widest uppercase mt-2 sm:mt-3 px-2.5 sm:px-3 py-1 rounded-full bg-black/15 border border-white/5 transition-all ${isRunning ? 'animate-pulse' : 'opacity-50'}`}>
               {isRunning ? '● Running' : 'Paused'}
             </span>
           </div>
 
           {/* Symmetrical Controls Row */}
-          <div className="flex gap-4 md:gap-5 justify-center">
+          <div className="flex gap-2 sm:gap-4 justify-center w-full">
             <button 
+              type="button"
               onClick={handleStart}
-              className="px-9 py-3 text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
+              className="flex-1 max-w-[100px] py-2 sm:py-3 text-sm sm:text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
             >
               Start
             </button>
             <button 
+              type="button"
               onClick={handlePause}
-              className="px-9 py-3 text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
+              className="flex-1 max-w-[100px] py-2 sm:py-3 text-sm sm:text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
             >
               Pause
             </button>
             <button 
+              type="button"
               onClick={handleReset}
-              className="px-9 py-3 text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
+              className="flex-1 max-w-[100px] py-2 sm:py-3 text-sm sm:text-lg md:text-xl font-bold bg-[#00C82B] text-black rounded-lg shadow-[0_8px_16px_rgba(0,0,0,0.15)] hover:bg-[#00b527] hover:scale-105 transition-all select-none active:scale-95 cursor-pointer"
             >
               Reset
             </button>
           </div>
 
           {/* Voice control section */}
-          <div className="mt-8 flex flex-col items-center gap-3 bg-black/25 p-5 rounded-2xl max-w-sm w-full border border-white/5 mx-auto">
+          <div className="mt-4 sm:mt-8 flex flex-col items-center gap-2 sm:gap-3 bg-black/25 p-4 sm:p-5 rounded-2xl max-w-sm w-full border border-white/5 mx-auto">
             <div className="flex items-center gap-3">
               <MicButton
                 isListening={pomodoroMic.isListening}

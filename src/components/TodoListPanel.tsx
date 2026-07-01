@@ -279,21 +279,21 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
   });
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#8E1616] p-6 md:p-10 overflow-y-auto flex flex-col font-sans">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-4xl md:text-6xl font-bold text-[#F5E8C7]">Your Personalised Task List</h2>
+    <div className="fixed inset-0 z-[200] bg-[#8E1616] p-4 sm:p-8 md:p-10 overflow-y-auto flex flex-col font-sans">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-[#F5E8C7]">Task Organizer</h2>
         <button 
           onClick={onClose}
-          className="bg-yellow-400 text-black font-semibold px-6 py-3.5 rounded-lg cursor-pointer transition-all active:scale-95 text-base shadow-lg"
+          className="bg-yellow-400 text-black font-semibold px-4 sm:px-6 py-2 sm:py-3.5 rounded-lg cursor-pointer transition-all active:scale-95 text-sm sm:text-base shadow-lg"
         >
           Close
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 flex-1 mt-4">
+      <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 flex-1 mt-2 sm:mt-4">
         {/* Left column - Add Task Form */}
-        <div className="w-full lg:w-1/3 bg-[#F5E8C7] rounded-2xl p-6 shadow-xl h-fit">
-          <h3 className="text-2xl font-bold text-[#8E1616] mb-4 border-b-2 border-[#ffb082] pb-2">Add New Task</h3>
+        <div className="w-full lg:w-1/3 bg-[#F5E8C7] rounded-2xl p-4 sm:p-6 shadow-xl h-fit">
+          <h3 className="text-xl sm:text-2xl font-bold text-[#8E1616] mb-4 border-b-2 border-[#ffb082] pb-2">Add New Task</h3>
           <form onSubmit={handleAddTask} className="flex flex-col gap-4">
             <div>
               <label className="text-sm font-semibold text-[#8E1616] block mb-1">Task Title</label>
@@ -303,7 +303,7 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
                   placeholder="Enter Task Name"
                   value={taskInput}
                   onChange={(e) => setTaskInput(e.target.value)}
-                  className="flex-1 p-3.5 text-lg bg-[#ffb082]/20 border border-[#ffb082] rounded-lg outline-none text-[#8E1616] placeholder:text-[#8E1616]/40 focus:bg-[#ffb082]/30"
+                  className="flex-1 p-2.5 sm:p-3.5 text-sm sm:text-lg bg-[#ffb082]/20 border border-[#ffb082] rounded-lg outline-none text-[#8E1616] placeholder:text-[#8E1616]/40 focus:bg-[#ffb082]/30"
                 />
                 <MicButton
                   isListening={taskMic.isListening}
@@ -321,7 +321,7 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
                   placeholder="Enter Details or Sub-tasks"
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
-                  className="flex-1 h-32 p-3.5 text-lg bg-[#ffb082]/20 border border-[#ffb082] rounded-lg outline-none text-[#8E1616] placeholder:text-[#8E1616]/40 focus:bg-[#ffb082]/30 resize-none"
+                  className="flex-1 h-24 sm:h-32 p-2.5 sm:p-3.5 text-sm sm:text-lg bg-[#ffb082]/20 border border-[#ffb082] rounded-lg outline-none text-[#8E1616] placeholder:text-[#8E1616]/40 focus:bg-[#ffb082]/30 resize-none"
                 />
                 <MicButton
                   isListening={detailsMic.isListening}
@@ -335,7 +335,7 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
 
             {/* Visual feedback strip — shows when listening or when an error occurs */}
             {(taskMic.isListening || detailsMic.isListening) && (
-              <div className="flex items-center gap-2 text-red-600 text-sm font-semibold animate-pulse bg-red-100/80 p-2 rounded-lg">
+              <div className="flex items-center gap-2 text-red-600 text-xs sm:text-sm font-semibold animate-pulse bg-red-100/80 p-2 rounded-lg">
                 <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-ping" />
                 <span>Listening... speak now (Indian-English accent optimized)</span>
               </div>
@@ -360,27 +360,27 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
                 onChange={(e) => setImp(e.target.checked)}
                 className="w-5 h-5 cursor-pointer accent-[#8E1616]"
               />
-              <label htmlFor="check-imp" className="text-lg font-medium text-[#8E1616] select-none cursor-pointer">
+              <label htmlFor="check-imp" className="text-base sm:text-lg font-medium text-[#8E1616] select-none cursor-pointer">
                 Mark as Important
               </label>
             </div>
 
             <div className="flex flex-col gap-1">
               <label htmlFor="task-deadline" className="text-sm font-bold text-[#8E1616]">
-                Deadline:
+                Deadline (Date & Time):
               </label>
               <input 
                 id="task-deadline" 
-                type="date"
+                type="datetime-local"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
-                className="w-full p-3 bg-white border-2 border-[#ffb082] rounded-lg text-black outline-none focus:border-[#ff510d]"
+                className="w-full p-2.5 bg-white border-2 border-[#ffb082] rounded-lg text-black outline-none focus:border-[#ff510d] text-sm sm:text-base"
               />
             </div>
 
             <button 
               type="submit"
-              className="w-full p-4 mt-2 text-xl font-bold rounded-lg bg-[#8E1616] text-[#F5E8C7] cursor-pointer transition-all hover:bg-[#ff510d] hover:text-white active:scale-97 shadow-md"
+              className="w-full p-3 sm:p-4 mt-2 text-lg sm:text-xl font-bold rounded-lg bg-[#8E1616] text-[#F5E8C7] cursor-pointer transition-all hover:bg-[#ff510d] hover:text-white active:scale-97 shadow-md"
             >
               Add Task
             </button>
@@ -388,14 +388,14 @@ export default function TodoListPanel({ userId, onClose }: TodoListPanelProps) {
         </div>
 
         {/* Right column - Tasks List */}
-        <div className="w-full lg:w-2/3 bg-[#F5E8C7] rounded-2xl p-6 shadow-xl flex flex-col lg:h-[720px] min-h-[550px]">
+        <div className="w-full lg:w-2/3 bg-[#F5E8C7] rounded-2xl p-4 sm:p-6 shadow-xl flex flex-col lg:h-[720px] min-h-[500px]">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 pb-2 border-b-2 border-[#ffb082]">
-            <h3 className="text-2xl font-bold text-[#8E1616]">Active Tasks ({tasks.length})</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#8E1616]">Active Tasks ({tasks.length})</h3>
             
             <button 
               onClick={handleAiPrioritize}
               disabled={prioritizing || tasks.length === 0}
-              className="w-full sm:w-auto bg-gradient-to-r from-purple-700 to-[#ff510d] text-white font-bold py-3 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-98 transition-all"
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-700 to-[#ff510d] text-white font-bold py-2.5 px-5 rounded-xl shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-98 transition-all text-sm sm:text-base"
             >
               <Sparkles className="w-5 h-5 animate-pulse" />
               {prioritizing ? '⏳ AI Prioritizing...' : '✨ AI Prioritize Tasks'}
