@@ -51,3 +51,12 @@ export interface HistoryRecord {
   completed: number;
   total: number;
 }
+
+export interface VoiceNote {
+  id: string;
+  audioUrl: string;      // Base64 data URL
+  duration: number;      // Seconds
+  createdAt: string;     // ISO timestamp
+  title: string;         // Descriptive title
+}
+
