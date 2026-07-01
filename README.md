@@ -70,6 +70,7 @@ Chrono moves beyond traditional static reminders. It is a context-aware applicat
 ## ✨ Key Features
 
 * 🎙️ **Voice-Automated Task Capturing:** Native Web Speech API integration allowing users to dictate tasks, details, and complex situations hands-free.
+
 * 🎧 **Voice Notes Journal:** A dedicated recording panel where users can capture, store, and replay short voice memos over time — recorded directly in-browser and synced per-user via Firestore, no external audio service required.
 * 🧠 **Intelligent Task Prioritization:** A Gemini-powered engine that analyzes task deadlines and importance to dynamically re-sequence daily agendas.
 * 🤖 **Chrono-Coach (Conversational Mentor):** An interactive sidebar coach that parses real-time stress scenarios, drafts markdown-formatted strategies, and allows users to inject actionable planner blocks directly into their dashboard with a single tap.
