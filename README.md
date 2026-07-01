@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="600" alt="Chrono Logo" src="logo.png" />
+  <img width="900" height="380" alt="Chrono Logo" src="logo.png" />
   
   <br />
   <br />
